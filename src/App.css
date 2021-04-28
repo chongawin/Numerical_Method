@@ -1,0 +1,121 @@
+#c1{
+  width: 1000px;
+  height: fit-content;
+  background-color: #ffffff;
+  margin-left: 50px;
+  margin-top: 0px;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+#c2{
+  width: 1000px;
+  height: fit-content;
+  background-color: #ffffff;
+  margin-left: 50px;
+  margin-top: 0px;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+#header{
+  background-color: #1e2022;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index:9;
+}
+
+#sider{
+  background-color: #1e2022;
+  position: fixed;
+  height: 100%;
+  overflow: scroll;
+}
+#sider::-webkit-scrollbar{
+  width: 0;
+}
+
+#content{
+  background-color: #333333;
+  padding: 24px;
+  margin: 0;
+  min-height: 95vh;
+  margin-left: 250px;
+}
+
+#Form{
+  border: 1px solid black;
+  width: fit-content;
+  height: 232px;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+#Form2{
+  border: 1px solid black;
+  width: fit-content;
+  height: fit-content;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+#iteration{
+  border: 1px solid black;
+  display: 'flex';
+  margin-top: 10px;
+  width: fit-content;
+  height: fit-content;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-radius: 10px;
+}
+
+#Graph{
+  border: 1px solid black;
+  width: 617px;
+  height: 232px;
+  padding: 15px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+#Answer{
+  border: 1px solid black;
+  width: 635px;
+  height: 253px;
+  padding: 15px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+#Answer2{
+  border: 1px solid black;
+  width: 635px;
+  height: fit-content;
+  padding: 15px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+#Graph2{
+  border: 1px solid black;
+  width: 515px;
+  height: 232px;
+  padding: 15px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+#Answer3{
+  border: 1px solid black;
+  width: 515px;
+  height: fit-content;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+
+
