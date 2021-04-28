@@ -9,7 +9,7 @@ import {
 //import { icons } from 'antd/lib/image/PreviewGroup';
 
 function App() {
-
+  let arr;
   const { Header, Sider, Content } = Layout;
   const { SubMenu } = Menu;
   const rootSubmenuKeys = ['sub1', 'sub2', 'sub3'];
