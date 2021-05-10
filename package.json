@@ -1,6 +1,6 @@
 {
   "homepage": "http://chongawin.github.io/Numerical_Method",
-  "name": "Numerical_Method",
+  "name": "my-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
