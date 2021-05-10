@@ -65,8 +65,18 @@ export default function Bisection() {
         let a = 1;
         let Xl = parseFloat(blog.xl);
         let Xr = parseFloat(blog.xr);
-        let xm = (Xl + Xr) / 2, fxm, fxr, xlnew, xrnew;
-        Xl = xm;
+        let xm, fxm, fxr, xlnew, xrnew, xmnew;
+
+        xm = ((Xl + Xr) / 2);
+        fxm = compile(fx).evaluate({ x: xm });
+        fxr = compile(fx).evaluate({ x: Xr });
+
+        if (fxm * fxr < 0) {
+            Xl = xm;
+        }
+        else {
+            Xr = xm;
+        }
 
         while (a > 0.00001) {
             if (isNaN(Xl) == true || isNaN(Xr) == true) {
@@ -74,28 +84,30 @@ export default function Bisection() {
                 break;
             }
             else {
-                xm = (Xl + Xr) / 2;
-                fxm = compile(fx).evaluate({ x: xm });
+                xmnew = (Xl + Xr) / 2;
+                fxm = compile(fx).evaluate({ x: xmnew });
                 fxr = compile(fx).evaluate({ x: Xr });
                 if (fxm * fxr < 0) {
-                    xlnew = xm;
-                    a = abs((xlnew - Xl) / xlnew);
-                    Xl = xlnew;
-                    console.log("iteration", i, "epsilon =", round(a, 6));
-                    arr1.push(i);
                     arr2.push(Xl);
                     arr3.push(Xr);
+                    xlnew = xmnew;
+                    a = abs((xlnew - xm) / xmnew);
+                    Xl = xlnew;
+                    xm = xmnew
+                    console.log("iteration", i, "epsilon =", round(a, 6));
+                    arr1.push(i);
                     arr4.push(a);
                     output();
                 }
                 else {
-                    xrnew = xm;
-                    a = abs((xrnew - Xr) / xrnew);
-                    Xr = xrnew;
-                    console.log("iteration", i, "epsilon =", round(a, 6));
-                    arr1.push(i);
                     arr2.push(Xl);
                     arr3.push(Xr);
+                    xrnew = xmnew;
+                    a = abs((xrnew - xm) / xmnew);
+                    Xr = xrnew;
+                    xm = xmnew
+                    console.log("iteration", i, "epsilon =", round(a, 6));
+                    arr1.push(i);
                     arr4.push(a);
                     output();
                 }
