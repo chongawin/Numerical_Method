@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Bisection from "./Method/Bisection";
+import Bisection from "./Method/Bisection2";
 
 it("test Bisection", () => {
   render(<Bisection />);
