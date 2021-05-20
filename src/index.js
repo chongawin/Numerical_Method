@@ -25,6 +25,9 @@ import Newton_Divide from './Method/Newton_Divide'
 import Largrange_Polynomials from './Method/Largrange_Polynomials'
 import Spline_Iterpolation from './Method/Spline_Iterpolation'
 
+//Least-Squares Regression
+import Least_Squares from './Method/Least_Squares'
+
 const rootElement = document.getElementById("root");
 ReactDOM.render(<BrowserRouter>
   <Switch>
@@ -46,6 +49,8 @@ ReactDOM.render(<BrowserRouter>
     <Route path="/Newton_Divide" component={Newton_Divide} />
     <Route path="/Largrange_Polynomials" component={Largrange_Polynomials} />
     <Route path="/Spline_Iterpolation" component={Spline_Iterpolation} />
+
+    <Route path="/Least_Squares" component={Least_Squares} />
   </Switch>
 </BrowserRouter>,
 rootElement

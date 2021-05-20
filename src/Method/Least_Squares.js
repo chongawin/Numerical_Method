@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Spline_Iterpolation_Graph from '../components/Spline_Iterpolation_Graph';
+import Largrange_Polynomials_Graph from '../components/Largrange_Polynomials_Graph';
 import { Layout, Table } from 'antd';
 import 'antd/dist/antd.css';
 import { Menu, Input, Button, Select } from 'antd';
@@ -12,7 +12,7 @@ import axios from 'axios';
 
 const { Option } = Select;
 
-export default function Spline_Iterpolation() {
+export default function Least_Squares() {
     const { Header, Sider, Content } = Layout;
     const { SubMenu } = Menu;
     const rootSubmenuKeys = ['sub1', 'sub2', 'sub3'];
@@ -28,12 +28,15 @@ export default function Spline_Iterpolation() {
     const [x2, setX2] = useState();
     const [x3, setX3] = useState();
     const [x4, setX4] = useState();
+    const [x5, setX5] = useState();
 
+    const [fx, setFx] = useState();
     const [fx0, setFx0] = useState();
     const [fx1, setFx1] = useState();
     const [fx2, setFx2] = useState();
     const [fx3, setFx3] = useState();
     const [fx4, setFx4] = useState();
+    const [fx5, setFx5] = useState();
 
     const [op, setOption] = useState();
     const [isSubmit, setSubmit] = useState(false);
@@ -51,9 +54,9 @@ export default function Spline_Iterpolation() {
         },
         ,
         {
-            title: 'F(x)',
-            dataIndex: 'fx',
-            key: 'fx',
+            title: 'y',
+            dataIndex: 'y',
+            key: 'y',
         },
     ];
 
@@ -61,32 +64,38 @@ export default function Spline_Iterpolation() {
         {
             key: '1',
             point: 1,
-            x: <Input id="x0" size='small' placeholder="x0" style={{ width: 60 }} value={x0} onChange={(e) => setX0(e.target.value)} />,
-            fx: <Input id="fx0" size='small' placeholder="F(x0)" style={{ width: 60 }} value={fx0} onChange={(e) => setFx0(e.target.value)} />
+            x: <Input id="x0" size='small' placeholder="x1" style={{ width: 60 }} value={x0} onChange={(e) => setX0(e.target.value)} />,
+            y: <Input id="fx0" size='small' placeholder="y1" style={{ width: 60 }} value={fx0} onChange={(e) => setFx0(e.target.value)} />
         },
         {
             key: '2',
             point: 2,
-            x: <Input id="x1" size='small' placeholder="x1" style={{ width: 60 }} value={x1} onChange={(e) => setX1(e.target.value)} />,
-            fx: <Input id="fx1" size='small' placeholder="F(x1)" style={{ width: 60 }} value={fx1} onChange={(e) => setFx1(e.target.value)} />
+            x: <Input id="x1" size='small' placeholder="x2" style={{ width: 60 }} value={x1} onChange={(e) => setX1(e.target.value)} />,
+            y: <Input id="fx1" size='small' placeholder="y2" style={{ width: 60 }} value={fx1} onChange={(e) => setFx1(e.target.value)} />
         },
         {
             key: '3',
             point: 3,
-            x: <Input id="x2" size='small' placeholder="x2" style={{ width: 60 }} value={x2} onChange={(e) => setX2(e.target.value)} />,
-            fx: <Input id="fx2" size='small' placeholder="F(x2)" style={{ width: 60 }} value={fx2} onChange={(e) => setFx2(e.target.value)} />
+            x: <Input id="x2" size='small' placeholder="x3" style={{ width: 60 }} value={x2} onChange={(e) => setX2(e.target.value)} />,
+            y: <Input id="fx2" size='small' placeholder="y3" style={{ width: 60 }} value={fx2} onChange={(e) => setFx2(e.target.value)} />
         },
         {
             key: '4',
             point: 4,
-            x: <Input id="x3" size='small' placeholder="x3" style={{ width: 60 }} value={x3} onChange={(e) => setX3(e.target.value)} />,
-            fx: <Input id="fx3" size='small' placeholder="F(x3)" style={{ width: 60 }} value={fx3} onChange={(e) => setFx3(e.target.value)} />
+            x: <Input id="x3" size='small' placeholder="x4" style={{ width: 60 }} value={x3} onChange={(e) => setX3(e.target.value)} />,
+            y: <Input id="fx3" size='small' placeholder="y4" style={{ width: 60 }} value={fx3} onChange={(e) => setFx3(e.target.value)} />
         },
         {
             key: '5',
             point: 5,
-            x: <Input id="x4" size='small' placeholder="x4" style={{ width: 60 }} value={x4} onChange={(e) => setX4(e.target.value)} />,
-            fx: <Input id="fx4" size='small' placeholder="F(x4)" style={{ width: 60 }} value={fx4} onChange={(e) => setFx4(e.target.value)} />
+            x: <Input id="x4" size='small' placeholder="x5" style={{ width: 60 }} value={x4} onChange={(e) => setX4(e.target.value)} />,
+            y: <Input id="fx4" size='small' placeholder="y5" style={{ width: 60 }} value={fx4} onChange={(e) => setFx4(e.target.value)} />
+        },
+        {
+            key: '6',
+            point: 6,
+            x: <Input id="x5" size='small' placeholder="x6" style={{ width: 60 }} value={x5} onChange={(e) => setX5(e.target.value)} />,
+            y: <Input id="fx5" size='small' placeholder="y6" style={{ width: 60 }} value={fx5} onChange={(e) => setFx5(e.target.value)} />
         }
     ];
 
@@ -102,7 +111,7 @@ export default function Spline_Iterpolation() {
     function componentDidMount() {
         let api;
 
-        axios.get('http://localhost:8000/data/Newton_Divide').then(res => {
+        axios.get('http://localhost:8000/data/Least_Squares').then(res => {
             api = res.data;
             console.log("reply: ", api);
             setFx0(api.fx0);
@@ -110,11 +119,14 @@ export default function Spline_Iterpolation() {
             setFx2(api.fx2);
             setFx3(api.fx3);
             setFx4(api.fx4);
+            setFx5(api.fx5);
+
             setX0(api.x0);
             setX1(api.x1);
             setX2(api.x2);
             setX3(api.x3);
             setX4(api.x4);
+            setX5(api.x5);
             setX(api.x);
         });
 
@@ -132,21 +144,21 @@ export default function Spline_Iterpolation() {
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        const blog = { fx0, fx1, fx2, fx3, fx4, x0, x1, x2, x3, x4, x, op };
+        const blog = { fx0, fx1, fx2, fx3, fx4, fx5, x0, x1, x2, x3, x4, x5, x, op };
         if (blog.op == undefined) {
-            blog.op = "Linear_Interpolation";
+            blog.op = "Linear_Regression";
             console.log(blog.op);
         }
 
-        if (blog.op == "Linear_Interpolation") {
+        if (blog.op == "Linear_Regression") {
             blog.op = 1;
             console.log(blog.op);
         }
-        else if (blog.op == "Qurdratic_Interpolation") {
+        else if (blog.op == "Polynomial_Regression") {
             blog.op = 2;
             console.log(blog.op);
         }
-        else if (blog.op == "Cubic_Interpolation") {
+        else if (blog.op == "Multiple_Regression") {
             blog.op = 3;
             console.log(blog.op);
         }
@@ -169,53 +181,81 @@ export default function Spline_Iterpolation() {
         let X2 = parseFloat(blog.x2);
         let X3 = parseFloat(blog.x3);
         let X4 = parseFloat(blog.x4);
+        let X5 = parseFloat(blog.x5);
 
         let Fx0 = parseFloat(blog.fx0);
         let Fx1 = parseFloat(blog.fx1);
         let Fx2 = parseFloat(blog.fx2);
         let Fx3 = parseFloat(blog.fx3);
         let Fx4 = parseFloat(blog.fx4);
+        let Fx5 = parseFloat(blog.fx5);
         let Fx;
 
-        let m1, m2, m3, m4;
+        let n = 6, sumx, sumy, sumx2, sumxy;
+        sumx = X0 + X1 + X2 + X3 + X4 + X5;
+        console.log(sumx);
+        sumx2 = (X0 ** 2) + (X1 ** 2) + (X2 ** 2) + (X3 ** 2) + (X4 ** 2) + (X5 ** 2);
+        console.log(sumx2);
+        sumy = Fx0 + Fx1 + Fx2 + Fx3 + Fx4 + Fx5;
+        console.log(sumy);
+        sumxy = (X0 * Fx0) + (X1 * Fx1) + (X2 * Fx2) + (X3 * Fx3) + (X4 * Fx4) + (X5 * Fx5);
+        console.log(sumxy);
+
+        let a0, a1;
+        let L0, L1, L2, L3, L4;
 
         if (blog.op == 1) {
-            m1 = ((Fx4 - Fx0) / (X4 - X0));
-            Fx = Fx0 + (m1 * (X - X0));
-            console.log(Fx);
-            document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
+            let A = [
+                [n, sumx, sumy],
+                [sumx, sumx2, sumxy]
+            ];
+            let B = [
+                [n, sumx, sumy],
+                [sumx / A[0][0], sumx2 / A[0][0], sumxy / A[0][0]]
+            ];
+            let C = [
+                [n * B[1][0], sumx * B[1][0], sumy * B[1][0]],
+                [sumx, sumx2, sumxy]
+            ];
+            if (C[1][0] - C[0][0] != 0) {
+                let D = [
+                    [C[0][0] + C[1][0], C[0][1] + C[1][1], C[0][2] + C[1][2]],
+                    [C[1][0], C[1][1], C[1][2]]
+                ];
+                C = D;
+            }
+            else {
+                let D = [
+                    [C[0][0] - C[1][0], C[0][1] - C[1][1], C[0][2] - C[1][2]],
+                    [C[1][0], C[1][1], C[1][2]]
+                ];
+                C = D;
+            }
+            a1 = C[0][2] / C[0][1];
+            a0 = ((A[0][2] - (A[0][1] * a1)) / A[0][0]);
+            Fx = a0 + (a1 * X);
+            setFx(Fx);
+            document.getElementById('fx').innerHTML = "g(" + X + ")" + "=" + Fx;
         }
         else if (blog.op == 2) {
-            if (X >= X0 && X <= X2) {
-                m1 = ((Fx2 - Fx0) / (X2 - X0));
-                Fx = Fx0 + (m1 * (X - X0));
-            }
-            else if (X >= X2 && X <= X4) {
-                m2 = ((Fx4 - Fx2) / (X4 - X2));
-                Fx = Fx2 + (m2 * (X - X2));
-            }
+            L0 = (((X4 - X) * (X2 - X)) / ((X4 - X0) * (X2 - X0)));
+            L1 = (((X0 - X) * (X4 - X)) / ((X0 - X2) * (X4 - X2)));
+            L2 = (((X0 - X) * (X2 - X)) / ((X0 - X4) * (X2 - X4)));
+            Fx = (L0 * Fx0) + (L1 * Fx2) + (L2 * Fx4);
             console.log(Fx);
+            setFx(Fx);
             document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
         }
         else if (blog.op == 3) {
-            if (X >= X0 && X <= X1) {
-                m1 = ((Fx1 - Fx0) / (X1 - X0));
-                Fx = Fx0 + (m1 * (X - X0));
-            }
-            else if (X >= X1 && X <= X2) {
-                m2 = ((Fx2 - Fx1) / (X2 - X1));
-                Fx = Fx1 + (m2 * (X - X1));
-            }
-            else if (X >= X2 && X <= X3) {
-                m3 = ((Fx3 - Fx2) / (X3 - X2));
-                Fx = Fx2 + (m3 * (X - X2));
-            }
-            else if (X >= X3 && X <= X4) {
-                m4 = ((Fx4 - Fx3) / (X4 - X3));
-                Fx = Fx3 + (m4 * (X - X3));
-            }
+            L0 = (((X1 - X) * (X2 - X) * (X3 - X) * (X4 - X)) / ((X1 - X0) * (X2 - X0) * (X3 - X0) * (X4 - X0)));
+            L1 = (((X0 - X) * (X2 - X) * (X3 - X) * (X4 - X)) / ((X0 - X1) * (X2 - X1) * (X3 - X1) * (X4 - X1)));
+            L2 = (((X0 - X) * (X1 - X) * (X3 - X) * (X4 - X)) / ((X0 - X2) * (X1 - X2) * (X3 - X2) * (X4 - X2)));
+            L3 = (((X0 - X) * (X1 - X) * (X2 - X) * (X4 - X)) / ((X0 - X3) * (X1 - X3) * (X2 - X3) * (X4 - X3)));
+            L4 = (((X0 - X) * (X1 - X) * (X2 - X) * (X3 - X)) / ((X0 - X4) * (X1 - X4) * (X2 - X4) * (X3 - X4)));
+            Fx = (L0 * Fx0) + (L1 * Fx1) + (L2 * Fx2) + (L3 * Fx3) + (L4 * Fx4);
             console.log(Fx);
-            document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
+            setFx(Fx);
+            document.getElementById('fx').innerHTML = "g(" + X + ")" + "=" + Fx;
         }
     }
 
@@ -228,7 +268,7 @@ export default function Spline_Iterpolation() {
             </Layout>
             <Layout style={{ marginTop: 64 }}>
                 <Sider id="sider" width={300}>
-                    <Menu mode="inline" onOpenChange={onOpenChange} theme="light" defaultOpenKeys={['sub3']}>
+                    <Menu mode="inline" onOpenChange={onOpenChange} theme="light" defaultOpenKeys={['sub4']}>
                         <SubMenu key="sub1" title="Root of Equations" icon={<ApartmentOutlined />}>
                             <Menu.Item key="1">
                                 <Link to="/Bisection">Bisection Method</Link>
@@ -264,17 +304,17 @@ export default function Spline_Iterpolation() {
                 <Layout>
                     <Content id="content">
                         <div id="c1" onSubmit={handleSubmit}>
-                            <h1 style={{ textAlign: 'center', paddingBottom: '20px', margin: 0 }}>Spline Iterpolation Method</h1>
+                            <h1 style={{ textAlign: 'center', paddingBottom: '20px', margin: 0 }}>Least-Squares Regression Method</h1>
                             <div style={{ display: 'flex' }}>
                                 <form id="Form2" >
-                                    <Select defaultValue="Linear_Interpolation" size='large' style={{ width: 400 }} onChange={handleChange}>
-                                        <Option value="Linear_Interpolation">Linear Interpolation ( 2 point 1, 5 )</Option>
-                                        <Option value="Qurdratic_Interpolation">Qurdratic Interpolation ( 3 point 1, 3, 5 )</Option>
-                                        <Option value="Cubic_Interpolation">Cubic Interpolation ( 5 point 1, 2, 3, 4, 5 )</Option>
+                                    <Select defaultValue="Linear_Regression" size='large' style={{ width: 400 }} onChange={handleChange}>
+                                        <Option value="Linear_Regression">Linear Regression</Option>
+                                        <Option value="Polynomial_Regression">Polynomial Regression</Option>
+                                        <Option value="Multiple_Regression">Multiple Regression</Option>
                                     </Select>
                                     <br /><br />
                                     <Table dataSource={data} columns={columns} />
-                                    <h3>find F(x) when x = ?</h3>
+                                    <h3>find g(x) when x = ?</h3>
                                     <Input id="x" addonBefore="x" size='middle' placeholder="input x" style={{ width: 300 }} value={x} onChange={(e) => setX(e.target.value)} />
                                     <br />
                                     <h4 style={{ marginTop: '10px' }}>Calculate</h4>
@@ -292,8 +332,8 @@ export default function Spline_Iterpolation() {
                                     <div id='Graph2'>
                                         {
                                             isSubmit &&
-                                            <Spline_Iterpolation_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx0={fx0} fx1={fx1} fx2={fx2} fx3={fx3}
-                                                fx4={fx4} />
+                                            <Largrange_Polynomials_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx0={fx0} fx1={fx1} fx2={fx2} fx3={fx3}
+                                                fx4={fx4} fx={fx} />
                                         }
                                     </div>
                                     <div id='Answer3'>

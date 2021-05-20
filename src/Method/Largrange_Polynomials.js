@@ -35,6 +35,8 @@ export default function Largrange_Polynomials() {
     const [fx2, setFx2] = useState();
     const [fx3, setFx3] = useState();
     const [fx4, setFx4] = useState();
+
+    const [op, setOption] = useState();
     const [isSubmit, setSubmit] = useState(false);
 
     const columns = [
@@ -125,12 +127,30 @@ export default function Largrange_Polynomials() {
 
     function handleChange(value) {
         console.log(`selected ${value}`);
+        setOption(value);
     }
 
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        const blog = { fx0, fx1, fx2, fx3, fx4, x0, x1, x2, x3, x4, x };
+        const blog = { fx0, fx1, fx2, fx3, fx4, x0, x1, x2, x3, x4, x, op };
+        if (blog.op == undefined) {
+            blog.op = "Linear_Interpolation";
+            console.log(blog.op);
+        }
+
+        if (blog.op == "Linear_Interpolation") {
+            blog.op = 1;
+            console.log(blog.op);
+        }
+        else if (blog.op == "Qurdratic_Interpolation") {
+            blog.op = 2;
+            console.log(blog.op);
+        }
+        else if (blog.op == "Polynomial_Interpolation") {
+            blog.op = 3;
+            console.log(blog.op);
+        }
 
         document.getElementById('fx0').disabled = true;
         document.getElementById('fx1').disabled = true;
@@ -144,8 +164,6 @@ export default function Largrange_Polynomials() {
         document.getElementById('x4').disabled = true;
         document.getElementById('x').disabled = true;
 
-        let i = 1;
-        let a = 1;
         let X = parseFloat(blog.x);
         let X0 = parseFloat(blog.x0);
         let X1 = parseFloat(blog.x1);
@@ -159,18 +177,36 @@ export default function Largrange_Polynomials() {
         let Fx3 = parseFloat(blog.fx3);
         let Fx4 = parseFloat(blog.fx4);
         let Fx;
+        let L0, L1, L2, L3, L4;
 
-        let L0 = ((X4 - X) / (X4 - X0));
-        console.log(L0);
-        let L1 = ((X0 - X) / (X0 - X4));
-        console.log(L1);
-
-        Fx = (L0 * Fx0) + (L1 * Fx4);
-        console.log(Fx);
-        setFx(Fx);
-        document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
-
-
+        if (blog.op == 1) {
+            L0 = ((X4 - X) / (X4 - X0));
+            L1 = ((X0 - X) / (X0 - X4));
+            Fx = (L0 * Fx0) + (L1 * Fx4);
+            console.log(Fx);
+            setFx(Fx);
+            document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
+        }
+        else if (blog.op == 2) {
+            L0 = (((X4 - X) * (X2 - X)) / ((X4 - X0) * (X2 - X0)));
+            L1 = (((X0 - X) * (X4 - X)) / ((X0 - X2) * (X4 - X2)));
+            L2 = (((X0 - X) * (X2 - X)) / ((X0 - X4) * (X2 - X4)));
+            Fx = (L0 * Fx0) + (L1 * Fx2) + (L2 * Fx4);
+            console.log(Fx);
+            setFx(Fx);
+            document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
+        }
+        else if (blog.op == 3) {
+            L0 = (((X1 - X) * (X2 - X) * (X3 - X) * (X4 - X)) / ((X1 - X0) * (X2 - X0) * (X3 - X0) * (X4 - X0)));
+            L1 = (((X0 - X) * (X2 - X) * (X3 - X) * (X4 - X)) / ((X0 - X1) * (X2 - X1) * (X3 - X1) * (X4 - X1)));
+            L2 = (((X0 - X) * (X1 - X) * (X3 - X) * (X4 - X)) / ((X0 - X2) * (X1 - X2) * (X3 - X2) * (X4 - X2)));
+            L3 = (((X0 - X) * (X1 - X) * (X2 - X) * (X4 - X)) / ((X0 - X3) * (X1 - X3) * (X2 - X3) * (X4 - X3)));
+            L4 = (((X0 - X) * (X1 - X) * (X2 - X) * (X3 - X)) / ((X0 - X4) * (X1 - X4) * (X2 - X4) * (X3 - X4)));
+            Fx = (L0 * Fx0) + (L1 * Fx1) + (L2 * Fx2) + (L3 * Fx3) + (L4 * Fx4);
+            console.log(Fx);
+            setFx(Fx);
+            document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
+        }
     }
 
     return (
@@ -210,7 +246,8 @@ export default function Largrange_Polynomials() {
                             <Menu.Item key="16"><Link to="Largrange_Polynomials">Largrange Polynomials</Link></Menu.Item>
                             <Menu.Item key="17"><Link to="Spline_Iterpolation">Spline Iterpolation</Link></Menu.Item>
                         </SubMenu>
-                        <SubMenu key="sub4" title="Least-Square Regression" icon={<ApartmentOutlined />}>
+                        <SubMenu key="sub4" title="Least-Squares Regression" icon={<ApartmentOutlined />}>
+                            <Menu.Item key="18"><Link to="Least_Squares">Least-Squares Regression</Link></Menu.Item>
                         </SubMenu>
                     </Menu>
                 </Sider>
@@ -222,13 +259,15 @@ export default function Largrange_Polynomials() {
                                 <form id="Form2" >
                                     <Select defaultValue="Linear_Interpolation" size='large' style={{ width: 400 }} onChange={handleChange}>
                                         <Option value="Linear_Interpolation">Linear Interpolation ( 2 point 1, 5 )</Option>
+                                        <Option value="Qurdratic_Interpolation">Qurdratic Interpolation ( 3 point 1, 3, 5 )</Option>
+                                        <Option value="Polynomial_Interpolation">Polynomial Interpolation ( 5 point 1, 2, 3, 4, 5 )</Option>
                                     </Select>
                                     <br /><br />
                                     <Table dataSource={data} columns={columns} />
                                     <h3>find F(x) when x = ?</h3>
                                     <Input id="x" addonBefore="x" size='middle' placeholder="input x" style={{ width: 300 }} value={x} onChange={(e) => setX(e.target.value)} />
                                     <br />
-                                    <h4 style={{ marginTop: '10px' }}>Calcalate</h4>
+                                    <h4 style={{ marginTop: '10px' }}>Calculate</h4>
                                     <Button type="primary" size='large' htmlType={'submit'} onClick={() => { setSubmit(true) }} style={{ backgroundColor: "#333333", borderColor: "#333333" }}>
                                         Submit
                                     </Button>
@@ -243,8 +282,8 @@ export default function Largrange_Polynomials() {
                                     <div id='Graph2'>
                                         {
                                             isSubmit &&
-                                            <Largrange_Polynomials_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx0 ={fx0} fx1 ={fx1} fx2 ={fx2} fx3 ={fx3}
-                                            fx4 = {fx4} fx = {fx}/>
+                                            <Largrange_Polynomials_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx0={fx0} fx1={fx1} fx2={fx2} fx3={fx3}
+                                                fx4={fx4} fx={fx} />
                                         }
                                     </div>
                                     <div id='Answer3'>

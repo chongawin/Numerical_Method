@@ -8,6 +8,7 @@ import {
     CalculatorOutlined, ApartmentOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { round } from 'mathjs';
 import axios from 'axios';
 
 const { Option } = Select;
@@ -34,6 +35,8 @@ export default function Newton_Divide() {
     const [fx2, setFx2] = useState();
     const [fx3, setFx3] = useState();
     const [fx4, setFx4] = useState();
+
+    const [op, setOption] = useState();
     const [isSubmit, setSubmit] = useState(false);
 
     const columns = [
@@ -124,12 +127,30 @@ export default function Newton_Divide() {
 
     function handleChange(value) {
         console.log(`selected ${value}`);
+        setOption(value);
     }
 
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        const blog = { fx0, fx1, fx2, fx3, fx4, x0, x1, x2, x3, x4, x };
+        const blog = { fx0, fx1, fx2, fx3, fx4, x0, x1, x2, x3, x4, x, op };
+        if (blog.op == undefined) {
+            blog.op = "Linear_Interpolation";
+            console.log(blog.op);
+        }
+
+        if (blog.op == "Linear_Interpolation") {
+            blog.op = 1;
+            console.log(blog.op);
+        }
+        else if (blog.op == "Qurdratic_Interpolation") {
+            blog.op = 2;
+            console.log(blog.op);
+        }
+        else if (blog.op == "Polynomial_Interpolation") {
+            blog.op = 3;
+            console.log(blog.op);
+        }
 
         document.getElementById('fx0').disabled = true;
         document.getElementById('fx1').disabled = true;
@@ -143,8 +164,6 @@ export default function Newton_Divide() {
         document.getElementById('x4').disabled = true;
         document.getElementById('x').disabled = true;
 
-        let i = 1;
-        let a = 1;
         let X = parseFloat(blog.x);
         let X0 = parseFloat(blog.x0);
         let X1 = parseFloat(blog.x1);
@@ -158,12 +177,31 @@ export default function Newton_Divide() {
         let Fx3 = parseFloat(blog.fx3);
         let Fx4 = parseFloat(blog.fx4);
         let Fx;
+        let C0, C1, C2, C3, C4;
+        C0 = Fx0;
 
-        Fx = Fx0 + (X - X0) * ((Fx4 - Fx0) / X4 - X0);
-        console.log(Fx);
-        document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
-
-
+        if (blog.op == 1) {
+            C1 = ((Fx4 - Fx0) / (X4 - X0));
+            Fx = C0 + (C1 * (X - X0));
+            console.log(Fx);
+            document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
+        }
+        else if (blog.op == 2) {
+            C1 = ((Fx2 - Fx0) / (X2 - X0));
+            C2 = ((((Fx4 - Fx2) / (X4 - X2)) - ((Fx2 - Fx0) / (X2 - X0))) / (X4 - X0));
+            Fx = C0 + (C1 * (X - X0)) + (C2 * ((X - X0) * (X - X2)));
+            console.log(Fx);
+            document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
+        }
+        else if (blog.op == 3) {
+            C1 = ((Fx1 - Fx0) / (X1 - X0));
+            C2 = ((((Fx2 - Fx1) / (X2 - X1)) - ((Fx1 - Fx0) / (X1 - X0))) / (X2 - X0));
+            C3 = ((((((Fx3 - Fx2) / (X3 - X2)) - ((Fx2 - Fx1) / (X2 - X1))) / (X3 - X1)) - ((((Fx2 - Fx1) / (X2 - X1)) - ((Fx1 - Fx0) / (X1 - X0))) / (X2 - X0))) / (X3 - X0));
+            C4 = ((((((((Fx4 - Fx3) / (X4 - X3)) - ((Fx3 - Fx2) / (X3 - X2))) / (X4 - X2)) - ((((Fx3 - Fx2) / (X3 - X2)) - ((Fx2 - Fx1) / (X2 - X1))) / (X3 - X1))) / (X4 - X1)) - ((((((Fx3 - Fx2) / (X3 - X2)) - ((Fx2 - Fx1) / (X2 - X1))) / (X3 - X1)) - ((((Fx2 - Fx1) / (X2 - X1)) - ((Fx1 - Fx0) / (X1 - X0))) / (X2 - X0))) / (X3 - X0))) / (X4 - X0));
+            Fx = C0 + (C1 * (X - X0)) + (C2 * ((X - X0) * (X - X1))) + (C3 * ((X - X0) * (X - X1) * (X - X2))) + (C4 * ((X - X0) * (X - X1) * (X - X2) * (X - X3)));
+            console.log(Fx);
+            document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
+        }
     }
 
     return (
@@ -203,7 +241,8 @@ export default function Newton_Divide() {
                             <Menu.Item key="16"><Link to="Largrange_Polynomials">Largrange Polynomials</Link></Menu.Item>
                             <Menu.Item key="17"><Link to="Spline_Iterpolation">Spline Iterpolation</Link></Menu.Item>
                         </SubMenu>
-                        <SubMenu key="sub4" title="Least-Square Regression" icon={<ApartmentOutlined />}>
+                        <SubMenu key="sub4" title="Least-Squares Regression" icon={<ApartmentOutlined />}>
+                            <Menu.Item key="18"><Link to="Least_Squares">Least-Squares Regression</Link></Menu.Item>
                         </SubMenu>
                     </Menu>
                 </Sider>
@@ -215,13 +254,15 @@ export default function Newton_Divide() {
                                 <form id="Form2" >
                                     <Select defaultValue="Linear_Interpolation" size='large' style={{ width: 400 }} onChange={handleChange}>
                                         <Option value="Linear_Interpolation">Linear Interpolation ( 2 point 1, 5 )</Option>
+                                        <Option value="Qurdratic_Interpolation">Qurdratic Interpolation ( 3 point 1, 3, 5 )</Option>
+                                        <Option value="Polynomial_Interpolation">Polynomial Interpolation ( 5 point 1, 2, 3, 4, 5 )</Option>
                                     </Select>
                                     <br /><br />
                                     <Table dataSource={data} columns={columns} />
                                     <h3>find F(x) when x = ?</h3>
                                     <Input id="x" addonBefore="x" size='middle' placeholder="input x" style={{ width: 300 }} value={x} onChange={(e) => setX(e.target.value)} />
                                     <br />
-                                    <h4 style={{ marginTop: '10px' }}>Calcalate</h4>
+                                    <h4 style={{ marginTop: '10px' }}>Calculate</h4>
                                     <Button type="primary" size='large' htmlType={'submit'} onClick={() => { setSubmit(true) }} style={{ backgroundColor: "#333333", borderColor: "#333333" }}>
                                         Submit
                                     </Button>
@@ -236,8 +277,8 @@ export default function Newton_Divide() {
                                     <div id='Graph2'>
                                         {
                                             isSubmit &&
-                                            <Newton_Divide_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx0 ={fx0} fx1 ={fx1} fx2 ={fx2} fx3 ={fx3}
-                                            fx4 = {fx4} />
+                                            <Newton_Divide_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx0={fx0} fx1={fx1} fx2={fx2} fx3={fx3}
+                                                fx4={fx4} />
                                         }
                                     </div>
                                     <div id='Answer3'>

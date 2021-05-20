@@ -162,7 +162,8 @@ export default function Secant() {
                             <Menu.Item key="16"><Link to="Largrange_Polynomials">Largrange Polynomials</Link></Menu.Item>
                             <Menu.Item key="17"><Link to="Spline_Iterpolation">Spline Iterpolation</Link></Menu.Item>
                         </SubMenu>
-                        <SubMenu key="sub4" title="Least-Square Regression" icon={<ApartmentOutlined />}>
+                        <SubMenu key="sub4" title="Least-Squares Regression" icon={<ApartmentOutlined />}>
+                            <Menu.Item key="18"><Link to="Least_Squares">Least-Squares Regression</Link></Menu.Item>
                         </SubMenu>
                     </Menu>
                 </Sider>
