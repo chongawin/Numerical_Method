@@ -219,7 +219,9 @@ function Gauss_Seidel() {
                             <Menu.Item key="17"><Link to="Spline_Iterpolation">Spline Iterpolation</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu key="sub4" title="Least-Squares Regression" icon={<ApartmentOutlined />}>
-                            <Menu.Item key="18"><Link to="Least_Squares">Least-Squares Regression</Link></Menu.Item>
+                            <Menu.Item key="18"><Link to="Linear_Regression">Linear Regression</Link></Menu.Item>
+                            <Menu.Item key="19"><Link to="Polynomial_Regression">Polynomial Regression</Link></Menu.Item>
+                            <Menu.Item key="20"><Link to="Multiple_Regression">Multiple Linear Regression</Link></Menu.Item>
                         </SubMenu>
                     </Menu>
                 </Sider>
@@ -254,11 +256,10 @@ function Gauss_Seidel() {
                                     <Button type="primary" size='large' onClick={refreshPage} style={{ marginLeft: 15, backgroundColor: "#333333", borderColor: "#333333" }}>
                                         Refresh
                                     </Button>
-                                    <SubMenu key="sub4" title="Least-Squares Regression" icon={<ApartmentOutlined />}>
-                                        <Menu.Item key="18"><Link to="Linear_Regression">Linear Regression</Link></Menu.Item>
-                                        <Menu.Item key="19"><Link to="Polynomial_Regression">Polynomial Regression</Link></Menu.Item>
-                                        <Menu.Item key="20"><Link to="Multiple_Regression">Multiple Linear Regression</Link></Menu.Item>
-                                    </SubMenu>
+                                    <Button type="primary" size='large' onClick={componentDidMount} style={{ marginLeft: 15, backgroundColor: "#333333", borderColor: "#333333" }}>
+                                        Sample
+                                    </Button>
+
                                 </form>
                                 <div id='Answer'>
                                     <h1 id="x1" style={{ margin: '35px' }}></h1>
