@@ -54,7 +54,7 @@
 
 #Form2{
   border: 1px solid black;
-  width: fit-content;
+  width: 500px;
   height: fit-content;
   padding: 15px;
   border-radius: 10px;
@@ -117,5 +117,13 @@
   margin-left: 10px;
 }
 
+#Answer4{
+  border: 1px solid black;
+  width: 515px;
+  height: fit-content;
+  padding: 15px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
 
 

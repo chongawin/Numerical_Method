@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import Largrange_Polynomials_Graph from '../components/Largrange_Polynomials_Graph';
 import { Layout, Table } from 'antd';
 import 'antd/dist/antd.css';
-import { Menu, Input, Button, Select } from 'antd';
+import { Menu, Input, Button } from 'antd';
 import '../App.css';
 import {
     CalculatorOutlined, ApartmentOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import regression from 'regression';
 
-const { Option } = Select;
-
-export default function Least_Squares() {
+export default function Linear_Regression() {
     const { Header, Sider, Content } = Layout;
     const { SubMenu } = Menu;
     const rootSubmenuKeys = ['sub1', 'sub2', 'sub3'];
@@ -37,8 +36,6 @@ export default function Least_Squares() {
     const [fx3, setFx3] = useState();
     const [fx4, setFx4] = useState();
     const [fx5, setFx5] = useState();
-
-    const [op, setOption] = useState();
     const [isSubmit, setSubmit] = useState(false);
 
     const columns = [
@@ -136,32 +133,10 @@ export default function Least_Squares() {
         window.location.reload(false);
     }
 
-    function handleChange(value) {
-        console.log(`selected ${value}`);
-        setOption(value);
-    }
-
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        const blog = { fx0, fx1, fx2, fx3, fx4, fx5, x0, x1, x2, x3, x4, x5, x, op };
-        if (blog.op == undefined) {
-            blog.op = "Linear_Regression";
-            console.log(blog.op);
-        }
-
-        if (blog.op == "Linear_Regression") {
-            blog.op = 1;
-            console.log(blog.op);
-        }
-        else if (blog.op == "Polynomial_Regression") {
-            blog.op = 2;
-            console.log(blog.op);
-        }
-        else if (blog.op == "Multiple_Regression") {
-            blog.op = 3;
-            console.log(blog.op);
-        }
+        const blog = { fx0, fx1, fx2, fx3, fx4, fx5, x0, x1, x2, x3, x4, x5, x };
 
         document.getElementById('fx0').disabled = true;
         document.getElementById('fx1').disabled = true;
@@ -189,74 +164,14 @@ export default function Least_Squares() {
         let Fx3 = parseFloat(blog.fx3);
         let Fx4 = parseFloat(blog.fx4);
         let Fx5 = parseFloat(blog.fx5);
-        let Fx;
+        let Fx, a0, a1;
 
-        let n = 6, sumx, sumy, sumx2, sumxy;
-        sumx = X0 + X1 + X2 + X3 + X4 + X5;
-        console.log(sumx);
-        sumx2 = (X0 ** 2) + (X1 ** 2) + (X2 ** 2) + (X3 ** 2) + (X4 ** 2) + (X5 ** 2);
-        console.log(sumx2);
-        sumy = Fx0 + Fx1 + Fx2 + Fx3 + Fx4 + Fx5;
-        console.log(sumy);
-        sumxy = (X0 * Fx0) + (X1 * Fx1) + (X2 * Fx2) + (X3 * Fx3) + (X4 * Fx4) + (X5 * Fx5);
-        console.log(sumxy);
-
-        let a0, a1;
-        let L0, L1, L2, L3, L4;
-
-        if (blog.op == 1) {
-            let A = [
-                [n, sumx, sumy],
-                [sumx, sumx2, sumxy]
-            ];
-            let B = [
-                [n, sumx, sumy],
-                [sumx / A[0][0], sumx2 / A[0][0], sumxy / A[0][0]]
-            ];
-            let C = [
-                [n * B[1][0], sumx * B[1][0], sumy * B[1][0]],
-                [sumx, sumx2, sumxy]
-            ];
-            if (C[1][0] - C[0][0] != 0) {
-                let D = [
-                    [C[0][0] + C[1][0], C[0][1] + C[1][1], C[0][2] + C[1][2]],
-                    [C[1][0], C[1][1], C[1][2]]
-                ];
-                C = D;
-            }
-            else {
-                let D = [
-                    [C[0][0] - C[1][0], C[0][1] - C[1][1], C[0][2] - C[1][2]],
-                    [C[1][0], C[1][1], C[1][2]]
-                ];
-                C = D;
-            }
-            a1 = C[0][2] / C[0][1];
-            a0 = ((A[0][2] - (A[0][1] * a1)) / A[0][0]);
-            Fx = a0 + (a1 * X);
-            setFx(Fx);
-            document.getElementById('fx').innerHTML = "g(" + X + ")" + "=" + Fx;
-        }
-        else if (blog.op == 2) {
-            L0 = (((X4 - X) * (X2 - X)) / ((X4 - X0) * (X2 - X0)));
-            L1 = (((X0 - X) * (X4 - X)) / ((X0 - X2) * (X4 - X2)));
-            L2 = (((X0 - X) * (X2 - X)) / ((X0 - X4) * (X2 - X4)));
-            Fx = (L0 * Fx0) + (L1 * Fx2) + (L2 * Fx4);
-            console.log(Fx);
-            setFx(Fx);
-            document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
-        }
-        else if (blog.op == 3) {
-            L0 = (((X1 - X) * (X2 - X) * (X3 - X) * (X4 - X)) / ((X1 - X0) * (X2 - X0) * (X3 - X0) * (X4 - X0)));
-            L1 = (((X0 - X) * (X2 - X) * (X3 - X) * (X4 - X)) / ((X0 - X1) * (X2 - X1) * (X3 - X1) * (X4 - X1)));
-            L2 = (((X0 - X) * (X1 - X) * (X3 - X) * (X4 - X)) / ((X0 - X2) * (X1 - X2) * (X3 - X2) * (X4 - X2)));
-            L3 = (((X0 - X) * (X1 - X) * (X2 - X) * (X4 - X)) / ((X0 - X3) * (X1 - X3) * (X2 - X3) * (X4 - X3)));
-            L4 = (((X0 - X) * (X1 - X) * (X2 - X) * (X3 - X)) / ((X0 - X4) * (X1 - X4) * (X2 - X4) * (X3 - X4)));
-            Fx = (L0 * Fx0) + (L1 * Fx1) + (L2 * Fx2) + (L3 * Fx3) + (L4 * Fx4);
-            console.log(Fx);
-            setFx(Fx);
-            document.getElementById('fx').innerHTML = "g(" + X + ")" + "=" + Fx;
-        }
+        const result = regression.linear([[X0, Fx0], [X1, Fx1], [X2, Fx2], [X3, Fx3], [X4, Fx4], [X5, Fx5]], { precision: 6 });
+        a0 = result.equation[1];
+        a1 = result.equation[0];
+        Fx = a0 + (a1 * X);
+        setFx(Fx);
+        document.getElementById('fx').innerHTML = "g(" + X + ")" + "=" + Fx;
     }
 
     return (
@@ -297,24 +212,21 @@ export default function Least_Squares() {
                             <Menu.Item key="17"><Link to="Spline_Iterpolation">Spline Iterpolation</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu key="sub4" title="Least-Squares Regression" icon={<ApartmentOutlined />}>
-                            <Menu.Item key="18"><Link to="Least_Squares">Least-Squares Regression</Link></Menu.Item>
+                            <Menu.Item key="18"><Link to="Linear_Regression">Linear Regression</Link></Menu.Item>
+                            <Menu.Item key="19"><Link to="Polynomial_Regression">Polynomial Regression</Link></Menu.Item>
+                            <Menu.Item key="20"><Link to="Multiple_Regression">Multiple Linear Regression</Link></Menu.Item>
                         </SubMenu>
                     </Menu>
                 </Sider>
                 <Layout>
                     <Content id="content">
                         <div id="c1" onSubmit={handleSubmit}>
-                            <h1 style={{ textAlign: 'center', paddingBottom: '20px', margin: 0 }}>Least-Squares Regression Method</h1>
+                            <h1 style={{ textAlign: 'center', paddingBottom: '20px', margin: 0 }}>Linear Regression Method</h1>
                             <div style={{ display: 'flex' }}>
                                 <form id="Form2" >
-                                    <Select defaultValue="Linear_Regression" size='large' style={{ width: 400 }} onChange={handleChange}>
-                                        <Option value="Linear_Regression">Linear Regression</Option>
-                                        <Option value="Polynomial_Regression">Polynomial Regression</Option>
-                                        <Option value="Multiple_Regression">Multiple Regression</Option>
-                                    </Select>
                                     <br /><br />
                                     <Table dataSource={data} columns={columns} />
-                                    <h3>find g(x) when x = ?</h3>
+                                    <h3>find g(x) When x = ? </h3>
                                     <Input id="x" addonBefore="x" size='middle' placeholder="input x" style={{ width: 300 }} value={x} onChange={(e) => setX(e.target.value)} />
                                     <br />
                                     <h4 style={{ marginTop: '10px' }}>Calculate</h4>
@@ -329,14 +241,7 @@ export default function Least_Squares() {
                                     </Button>
                                 </form>
                                 <div >
-                                    <div id='Graph2'>
-                                        {
-                                            isSubmit &&
-                                            <Largrange_Polynomials_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx0={fx0} fx1={fx1} fx2={fx2} fx3={fx3}
-                                                fx4={fx4} fx={fx} />
-                                        }
-                                    </div>
-                                    <div id='Answer3'>
+                                    <div id='Answer4'>
                                         <h1>Answer</h1>
                                         <h1 id="fx" style={{ margin: '35px' }}></h1>
                                     </div>

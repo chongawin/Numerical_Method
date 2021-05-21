@@ -26,7 +26,9 @@ import Largrange_Polynomials from './Method/Largrange_Polynomials'
 import Spline_Iterpolation from './Method/Spline_Iterpolation'
 
 //Least-Squares Regression
-import Least_Squares from './Method/Least_Squares'
+import Linear_Regression from './Method/Linear_Regession'
+import Polynomial_Regression from './Method/Polynomial_Regression'
+import Multiple_Regression from './Method/Multiple_Regression'
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<BrowserRouter>
@@ -50,7 +52,9 @@ ReactDOM.render(<BrowserRouter>
     <Route path="/Largrange_Polynomials" component={Largrange_Polynomials} />
     <Route path="/Spline_Iterpolation" component={Spline_Iterpolation} />
 
-    <Route path="/Least_Squares" component={Least_Squares} />
+    <Route path="/Linear_Regression" component={Linear_Regression} />
+    <Route path="/Polynomial_Regression" component={Polynomial_Regression} />
+    <Route path="/Multiple_Regression" component={Multiple_Regression} />
   </Switch>
 </BrowserRouter>,
 rootElement

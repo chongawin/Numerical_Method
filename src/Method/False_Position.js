@@ -64,22 +64,33 @@ export default function False_Position() {
         let a = 1;
         let Xl = parseFloat(blog.xl);
         let Xr = parseFloat(blog.xr);
-        let fxl, fxr, xlnew, xrnew, x1 = 0, x1new, fx1;
+        let fxl, fxr, x1, x1new, fx1;
+
+        fxl = compile(fx).evaluate({ x: Xl });
+        fxr = compile(fx).evaluate({ x: Xr });
+        x1 = (((Xl * fxr) - (Xr * fxl)) / (fxr - fxl));
+        fx1 = compile(fx).evaluate({ x: x1 });
+        if (fx1 < 0) {
+            Xl = x1;
+        }
+        else {
+            Xr = x1;
+        }
+
         while (a > 0.000001) {
             if (isNaN(Xl) == true || isNaN(Xr) == true) {
                 console.log('Please input value')
                 break;
             }
             else {
-                fxl = compile(fx).evaluate({ x: Xl });
-                fxr = compile(fx).evaluate({ x: Xr });
-                x1new = (Xl * fxr - Xr * fxl) / (fxr - fxl);
-                fx1 = compile(fx).evaluate({ x: x1 });
                 if (fx1 < 0) {
-                    xlnew = x1new;
+                    Xl = x1;
+                    fxl = compile(fx).evaluate({ x: Xl });
+                    fxr = compile(fx).evaluate({ x: Xr });
+                    x1new = (((Xl * fxr) - (Xr * fxl)) / (fxr - fxl));
                     a = abs((x1new - x1) / x1new);
                     x1 = x1new;
-                    Xl = xlnew;
+                    fx1 = compile(fx).evaluate({ x: x1 });
                     console.log("iteration", i, "epsilon =", round(a, 6));
                     arr1.push(i);
                     arr2.push(Xl);
@@ -89,10 +100,13 @@ export default function False_Position() {
                     output();
                 }
                 else {
-                    xrnew = x1new;
+                    Xr = x1;
+                    fxl = compile(fx).evaluate({ x: Xl });
+                    fxr = compile(fx).evaluate({ x: Xr });
+                    x1new = (((Xl * fxr) - (Xr * fxl)) / (fxr - fxl));
                     a = abs((x1new - x1) / x1new);
                     x1 = x1new;
-                    Xr = xrnew;
+                    fx1 = compile(fx).evaluate({ x: x1 });
                     console.log("iteration", i, "epsilon =", round(a, 6));
                     arr1.push(i);
                     arr2.push(Xl);
@@ -174,7 +188,9 @@ export default function False_Position() {
                             <Menu.Item key="17"><Link to="Spline_Iterpolation">Spline Iterpolation</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu key="sub4" title="Least-Squares Regression" icon={<ApartmentOutlined />}>
-                            <Menu.Item key="18"><Link to="Least_Squares">Least-Squares Regression</Link></Menu.Item>
+                            <Menu.Item key="18"><Link to="Linear_Regression">Linear Regression</Link></Menu.Item>
+                            <Menu.Item key="19"><Link to="Polynomial_Regression">Polynomial Regression</Link></Menu.Item>
+                            <Menu.Item key="20"><Link to="Multiple_Regression">Multiple Linear Regression</Link></Menu.Item>
                         </SubMenu>
                     </Menu>
                 </Sider>
