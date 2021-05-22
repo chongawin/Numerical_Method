@@ -30,6 +30,7 @@ export default function Newton_Divide() {
     const [x3, setX3] = useState();
     const [x4, setX4] = useState();
 
+    const [fx, setFx] = useState();
     const [fx0, setFx0] = useState();
     const [fx1, setFx1] = useState();
     const [fx2, setFx2] = useState();
@@ -184,6 +185,7 @@ export default function Newton_Divide() {
             C1 = ((Fx4 - Fx0) / (X4 - X0));
             Fx = C0 + (C1 * (X - X0));
             console.log(Fx);
+            setFx(Fx);
             document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
         }
         else if (blog.op == 2) {
@@ -191,6 +193,7 @@ export default function Newton_Divide() {
             C2 = ((((Fx4 - Fx2) / (X4 - X2)) - ((Fx2 - Fx0) / (X2 - X0))) / (X4 - X0));
             Fx = C0 + (C1 * (X - X0)) + (C2 * ((X - X0) * (X - X2)));
             console.log(Fx);
+            setFx(Fx);
             document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
         }
         else if (blog.op == 3) {
@@ -200,6 +203,7 @@ export default function Newton_Divide() {
             C4 = ((((((((Fx4 - Fx3) / (X4 - X3)) - ((Fx3 - Fx2) / (X3 - X2))) / (X4 - X2)) - ((((Fx3 - Fx2) / (X3 - X2)) - ((Fx2 - Fx1) / (X2 - X1))) / (X3 - X1))) / (X4 - X1)) - ((((((Fx3 - Fx2) / (X3 - X2)) - ((Fx2 - Fx1) / (X2 - X1))) / (X3 - X1)) - ((((Fx2 - Fx1) / (X2 - X1)) - ((Fx1 - Fx0) / (X1 - X0))) / (X2 - X0))) / (X3 - X0))) / (X4 - X0));
             Fx = C0 + (C1 * (X - X0)) + (C2 * ((X - X0) * (X - X1))) + (C3 * ((X - X0) * (X - X1) * (X - X2))) + (C4 * ((X - X0) * (X - X1) * (X - X2) * (X - X3)));
             console.log(Fx);
+            setFx(Fx);
             document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
         }
     }
@@ -279,7 +283,7 @@ export default function Newton_Divide() {
                                     <div id='Graph2'>
                                         {
                                             isSubmit &&
-                                            <Newton_Divide_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx0={fx0} fx1={fx1} fx2={fx2} fx3={fx3}
+                                            <Newton_Divide_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx={fx} fx0={fx0} fx1={fx1} fx2={fx2} fx3={fx3}
                                                 fx4={fx4} />
                                         }
                                     </div>

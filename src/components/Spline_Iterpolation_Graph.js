@@ -17,7 +17,8 @@ export default class Spline_Iterpolation_Graph extends Component {
         let { fx2 } = this.props;
         let { fx3 } = this.props;
         let { fx4 } = this.props;
-
+        let a;
+        
         let arr = [];
         arr.push(fx0);
         arr.push(fx1);
@@ -26,11 +27,21 @@ export default class Spline_Iterpolation_Graph extends Component {
         arr.push(fx4);
 
         let arr2 = [];
+        arr2.push(x);
         arr2.push(x0);
         arr2.push(x1);
         arr2.push(x2);
         arr2.push(x3);
         arr2.push(x4);
+        arr2.sort();
+
+        for (let i = 0; i < arr2.length; i++) {
+            if (arr2[i] == x) {
+                a = i;
+                arr.splice(i, 0, fx);
+            }
+        }
+
 
         let labels = arr2;
 

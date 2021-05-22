@@ -7,11 +7,10 @@ export default class Bisection_Graph extends Component {
         let { fx } = this.props;
         let { xl } = this.props;
         let { xr } = this.props;
-        let { error } = this.props;
+        let { arr4 } = this.props;
 
         let labels = range(xl, xr, 0.04).toArray();
-
-        let datapoints = error;
+        let datapoints = arr4;
 
         return <div style={{ width: 585, height: 200 }}>
             <Line

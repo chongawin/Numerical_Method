@@ -29,6 +29,7 @@ export default function Spline_Iterpolation() {
     const [x3, setX3] = useState();
     const [x4, setX4] = useState();
 
+    const [fx, setFx] = useState();
     const [fx0, setFx0] = useState();
     const [fx1, setFx1] = useState();
     const [fx2, setFx2] = useState();
@@ -183,18 +184,20 @@ export default function Spline_Iterpolation() {
             m1 = ((Fx4 - Fx0) / (X4 - X0));
             Fx = Fx0 + (m1 * (X - X0));
             console.log(Fx);
+            setFx(Fx);
             document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
         }
         else if (blog.op == 2) {
             if (X >= X0 && X <= X2) {
                 m1 = ((Fx2 - Fx0) / (X2 - X0));
-                Fx = Fx0 + (m1 * (X - X0));
+                Fx = Fx0 + (m1 * (X - X0)); 
             }
             else if (X >= X2 && X <= X4) {
                 m2 = ((Fx4 - Fx2) / (X4 - X2));
                 Fx = Fx2 + (m2 * (X - X2));
             }
             console.log(Fx);
+            setFx(Fx);
             document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
         }
         else if (blog.op == 3) {
@@ -215,6 +218,7 @@ export default function Spline_Iterpolation() {
                 Fx = Fx3 + (m4 * (X - X3));
             }
             console.log(Fx);
+            setFx(Fx);
             document.getElementById('fx').innerHTML = "F(" + X + ")" + "=" + Fx;
         }
     }
@@ -294,7 +298,7 @@ export default function Spline_Iterpolation() {
                                     <div id='Graph2'>
                                         {
                                             isSubmit &&
-                                            <Spline_Iterpolation_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx0={fx0} fx1={fx1} fx2={fx2} fx3={fx3}
+                                            <Spline_Iterpolation_Graph x0={x0} x1={x1} x2={x2} x3={x3} x4={x4} x={x} fx={fx} fx0={fx0} fx1={fx1} fx2={fx2} fx3={fx3}
                                                 fx4={fx4} />
                                         }
                                     </div>

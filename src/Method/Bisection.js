@@ -79,40 +79,34 @@ export default function Bisection() {
         }
 
         while (a > 0.00001) {
-            if (isNaN(Xl) == true || isNaN(Xr) == true) {
-                console.log('Please input value')
-                break;
+            xmnew = (Xl + Xr) / 2;
+            fxm = compile(fx).evaluate({ x: xmnew });
+            fxr = compile(fx).evaluate({ x: Xr });
+            if (fxm * fxr < 0) {
+                arr2.push(Xl);
+                arr3.push(Xr);
+                xlnew = xmnew;
+                a = abs((xlnew - xm) / xmnew);
+                Xl = xlnew;
+                xm = xmnew
+                console.log("iteration", i, "epsilon =", round(a, 6));
+                arr1.push(i);
+                arr4.push(a);
             }
             else {
-                xmnew = (Xl + Xr) / 2;
-                fxm = compile(fx).evaluate({ x: xmnew });
-                fxr = compile(fx).evaluate({ x: Xr });
-                if (fxm * fxr < 0) {
-                    arr2.push(Xl);
-                    arr3.push(Xr);
-                    xlnew = xmnew;
-                    a = abs((xlnew - xm) / xmnew);
-                    Xl = xlnew;
-                    xm = xmnew
-                    console.log("iteration", i, "epsilon =", round(a, 6));
-                    arr1.push(i);
-                    arr4.push(a);
-                    output();
-                }
-                else {
-                    arr2.push(Xl);
-                    arr3.push(Xr);
-                    xrnew = xmnew;
-                    a = abs((xrnew - xm) / xmnew);
-                    Xr = xrnew;
-                    xm = xmnew
-                    console.log("iteration", i, "epsilon =", round(a, 6));
-                    arr1.push(i);
-                    arr4.push(a);
-                    output();
-                }
-                i = i + 1;
+                arr2.push(Xl);
+                arr3.push(Xr);
+                xrnew = xmnew;
+                a = abs((xrnew - xm) / xmnew);
+                Xr = xrnew;
+                xm = xmnew
+                console.log("iteration", i, "epsilon =", round(a, 6));
+                arr1.push(i);
+                arr4.push(a);
+
             }
+            i = i + 1;
+            output();
         }
     }
 
@@ -141,8 +135,6 @@ export default function Bisection() {
 
         newDiv4.innerHTML = "<h4 style='margin-left:40px;text-align:center ;'>" + round(arr4[arr4.length - 1], 6) + "</h4>";
         document.getElementById('out-error').appendChild(newDiv4);
-
-
     }
 
     return (
@@ -215,7 +207,7 @@ export default function Bisection() {
                                 <div id='Graph'>
                                     {
                                         isSubmit &&
-                                        <Bisection_Graph fx={fx} xl={xl} xr={xr} error={arr4} />
+                                        <Bisection_Graph fx={fx} xl={xl} xr={xr} arr4={arr4} />
                                     }
                                 </div>
                             </div>
